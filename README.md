@@ -1,3 +1,5 @@
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/8b9355da-e79c-42f8-8feb-06dfaff55426" />
+
 # 🔧 EnvManager - Cross-Platform Environment and Service Manager
 
 **Version:** 1.0.0  
@@ -309,6 +311,7 @@ envmanager service list
 # Test Docker (if installed)
 envmanager docker list
 ```
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/fa32ad3f-0d5a-42f5-b712-4bb2b47a8bf7" />
 
 ---
 
