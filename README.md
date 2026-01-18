@@ -332,11 +332,11 @@ MIT License - see LICENSE file for details
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Credits
 
-Built with ❤️ by Logan Smith / Metaphy LLC
+Created by **Randell Logan Smith and Team Brain** at [Metaphy LLC](https://metaphysicsandcomputing.com)
 
-Part of the AutoProjects collection - professional CLI tools for developers.
+Part of the HMSS (Heavenly Morning Star System) ecosystem.
 
 ---
 
