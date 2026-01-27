@@ -1,0 +1,270 @@
+================================================================================
+                         ENVMANAGER CHEAT SHEET
+         Cross-Platform Environment and Service Manager v1.0
+================================================================================
+
+QUICK START
+--------------------------------------------------------------------------------
+# Install
+git clone https://github.com/DonkRonk17/EnvManager.git
+cd EnvManager && pip install -e .
+
+# First run
+envmanager --help
+
+================================================================================
+ENVIRONMENT VARIABLES
+--------------------------------------------------------------------------------
+
+List All Variables:
+  envmanager env list
+
+Filter Variables:
+  envmanager env list --filter PATH
+  envmanager env list --filter API
+
+Set Temporary Variable (session only):
+  envmanager env set API_KEY my-secret-key
+  envmanager env set DEBUG true
+
+Set Permanent Variable (survives reboot):
+  envmanager env set JAVA_HOME "/path/to/java" --permanent
+  envmanager env set NODE_ENV production --permanent
+
+Unset Variable:
+  envmanager env unset API_KEY
+
+================================================================================
+PROFILE MANAGEMENT
+--------------------------------------------------------------------------------
+
+List All Profiles:
+  envmanager profile list
+
+Create Profile (JSON format):
+  envmanager profile create dev '{"API_URL": "http://localhost", "DEBUG": "true"}'
+  envmanager profile create prod '{"API_URL": "https://api.example.com"}' --description "Production"
+
+Load Profile:
+  envmanager profile load dev
+  envmanager profile load prod
+
+Delete Profile:
+  envmanager profile delete old-profile
+
+================================================================================
+SERVICE MANAGEMENT
+--------------------------------------------------------------------------------
+
+List Services:
+  envmanager service list
+
+Start Service:
+  # Windows
+  envmanager service start "World Wide Web Publishing Service"
+  
+  # Linux (systemd)
+  envmanager service start nginx
+  
+  # macOS (launchd)
+  envmanager service start com.apple.music.server
+
+Stop Service:
+  envmanager service stop nginx
+  envmanager service stop postgresql
+
+================================================================================
+DOCKER MANAGEMENT
+--------------------------------------------------------------------------------
+
+List Running Containers:
+  envmanager docker list
+
+List All Containers (including stopped):
+  envmanager docker list --all
+
+Start Container:
+  envmanager docker start my-postgres
+  envmanager docker start my-app-container
+
+Stop Container:
+  envmanager docker stop my-postgres
+  envmanager docker stop my-app-container
+
+================================================================================
+PYTHON API
+--------------------------------------------------------------------------------
+
+Import:
+  from envmanager import EnvManager
+
+Basic Usage:
+  manager = EnvManager()
+  
+  # Environment variables
+  manager.list_env()
+  manager.set_env("API_KEY", "secret")
+  manager.unset_env("API_KEY")
+  
+  # Profiles
+  manager.create_profile("dev", {"VAR": "value"}, "Description")
+  manager.list_profiles()
+  manager.load_profile("dev")
+  manager.delete_profile("dev")
+  
+  # Services
+  manager.list_services()
+  manager.start_service("nginx")
+  manager.stop_service("nginx")
+  
+  # Docker
+  manager.list_containers(all_containers=False)
+  manager.start_container("my-container")
+  manager.stop_container("my-container")
+
+================================================================================
+INTEGRATION WITH TEAM BRAIN TOOLS
+--------------------------------------------------------------------------------
+
+With TokenTracker:
+  from tokentracker import TokenTracker
+  from envmanager import EnvManager
+  
+  tracker = TokenTracker()
+  manager = EnvManager()
+  
+  # Track which profile is used
+  manager.load_profile("dev")
+  tracker.log_usage("AGENT", "model", 100, 50, "Loaded dev profile")
+
+With ConfigManager:
+  from configmanager import ConfigManager
+  from envmanager import EnvManager
+  
+  config = ConfigManager()
+  manager = EnvManager()
+  
+  # Use centralized config for profile names
+  default_profile = config.get("envmanager.default_profile", "dev")
+  manager.load_profile(default_profile)
+
+With SynapseLink:
+  from synapselink import quick_send
+  from envmanager import EnvManager
+  
+  manager = EnvManager()
+  manager.load_profile("prod")
+  
+  quick_send("TEAM", "Environment Switch", "Loaded production profile for deployment")
+
+================================================================================
+CONFIGURATION FILES
+--------------------------------------------------------------------------------
+
+Location: ~/.envmanager/
+
+Files:
+  config.json     - Global configuration
+  profiles.json   - Saved environment profiles
+
+config.json format:
+  {
+    "default_profile": null,
+    "last_used": "dev"
+  }
+
+profiles.json format:
+  {
+    "dev": {
+      "description": "Development environment",
+      "env_vars": {
+        "API_URL": "http://localhost:8000",
+        "DEBUG": "true"
+      },
+      "created": "2026-01-27T10:00:00",
+      "last_used": "2026-01-27T14:30:00"
+    }
+  }
+
+================================================================================
+COMMON WORKFLOWS
+--------------------------------------------------------------------------------
+
+Development Setup:
+  1. envmanager profile create dev '{"DEBUG": "true", "API": "localhost"}'
+  2. envmanager profile load dev
+  3. envmanager service start postgresql
+  4. envmanager docker start redis-dev
+
+Production Deployment:
+  1. envmanager profile load prod
+  2. envmanager docker stop app-old
+  3. envmanager docker start app-new
+  4. envmanager service start nginx
+
+Quick Environment Check:
+  envmanager env list --filter API
+  envmanager env list --filter DEBUG
+  envmanager profile list
+
+================================================================================
+TROUBLESHOOTING
+--------------------------------------------------------------------------------
+
+Error: "Permission denied"
+  -> Run as administrator (Windows) or with sudo (Linux/macOS)
+
+Error: "Docker not installed"
+  -> Install Docker Desktop or Docker Engine
+  -> Ensure Docker is running and in PATH
+
+Error: "Profile not found"
+  -> Check profile name with: envmanager profile list
+  -> Create profile first: envmanager profile create NAME '{}'
+
+Error: "Variable not set permanently"
+  -> Windows: May need to restart terminal
+  -> Linux/macOS: Run 'source ~/.bashrc' or restart shell
+
+================================================================================
+PLATFORM-SPECIFIC NOTES
+--------------------------------------------------------------------------------
+
+Windows:
+  - Uses setx for permanent variables
+  - Uses sc.exe for services
+  - Requires admin for some service operations
+
+Linux:
+  - Permanent vars added to ~/.bashrc or ~/.zshrc
+  - Uses systemctl for services
+  - May need sudo for service management
+
+macOS:
+  - Permanent vars added to ~/.zshrc or ~/.bashrc
+  - Uses launchctl for services
+  - Docker requires Docker Desktop
+
+================================================================================
+KEYBOARD SHORTCUTS (Interactive Mode - if applicable)
+--------------------------------------------------------------------------------
+
+Ctrl+C          Cancel current operation
+Ctrl+D          Exit
+
+================================================================================
+RESOURCES
+--------------------------------------------------------------------------------
+
+Documentation:   README.md
+Examples:        EXAMPLES.md
+Integration:     INTEGRATION_PLAN.md
+Quick Starts:    QUICK_START_GUIDES.md
+
+GitHub:          https://github.com/DonkRonk17/EnvManager
+Issues:          https://github.com/DonkRonk17/EnvManager/issues
+
+================================================================================
+                        EnvManager - One Tool to Manage Them All
+                              Logan Smith / Metaphy LLC
+================================================================================
